@@ -190,3 +190,13 @@ You will see your path to the goal and map being initialized and new area being 
 CTRL + C the misson running terminal in the web-based VS
 ```
 Finally kill the docker container for the turtlebot being run in your main computer terminal just like you kill the siumualtion and also close the terminal where you logged into the turtlebot.
+
+### Team Contributions: Group 3
+| Team Member | Contribution |
+|---|---|
+| **Bishow** | I did all the parameter tuning and optimisation in `params_physical.yaml` for the physical rover during the final competition. Also contributed to testing, validation, and overall system performance improvements. |
+| **Mac** | Assisted with running and monitoring the final ROS 2 SLAM and navigation system during the competition and helped coordinate execution of the rover pipeline. |
+| **Nima** | Assisted with robot setup, integration, and preparation of the final system during the competition. |
+| **Joe** | Assisted with robot setup, deployment, and support during the final testing and competition stages. |
+
+All of us maintained our own simulation environments in our computers during development and testing. The final system integration and deployment for the competition were completed collaboratively as a team.

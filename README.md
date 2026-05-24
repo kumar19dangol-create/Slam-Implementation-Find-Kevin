@@ -1,55 +1,78 @@
-# Operation Find Kevin - Succulence Rover
+# Operation Find Kevin — Autonomous SLAM and Navigation System
 
-This repository contains the ROS 2 package used for the Algorithmic Robotics Grand Challenge, **Operation Find Kevin**. The system integrates pose-graph SLAM, A* path planning, and path-following navigation for the Succulence rover in the Unity Mars simulation.
+This repository contains the complete ROS 2 autonomy stack developed for the *Operation Find Kevin* robotics challenge. The project focuses on autonomous mapping, localisation, path planning, and navigation for the Succulence rover operating in a simulated Martian environment.
 
-## Project Overview
+The system enables the rover to explore an initially unknown environment using LiDAR and wheel odometry, construct an occupancy-grid map using pose-graph SLAM, estimate its corrected position, and autonomously navigate toward a target location using A* path planning and waypoint-following control.
 
-The final system connects mapping, planning, and navigation into one complete ROS 2 pipeline.
+The full robotics pipeline integrates sensing, localisation, mapping, planning, and motion control into a continuous real-time autonomy loop. As new sensor data is received, the rover continuously updates its map, corrects localisation drift, replans safe paths, and publishes velocity commands for navigation.
 
-Main ROS 2 nodes used in the final run:
+---
 
-- `/slam_node` - builds the SLAM map and corrected trajectory
-- `/planner_node` - runs A* path planning on the SLAM occupancy grid
-- `/navigator_node` - follows the planned path and sends velocity commands
-- `/map_to_odom_publisher` - publishes the static transform between map and odometry
-- `/base_to_lidar_publisher` - publishes the static transform between robot base and LiDAR
+## Core System Components
 
-Main topics used:
+### SLAM and Localisation
+- Motion-model based dead reckoning
+- Correlation-based LiDAR scan matching
+- Pose-graph optimisation using Gauss-Newton least squares
+- Occupancy-grid map reconstruction
+- Corrected SLAM odometry estimation
 
-| Topic | Message Type | Purpose |
+### Autonomous Navigation
+- A* shortest-path planning
+- Obstacle inflation for collision avoidance
+- Reachability analysis
+- Waypoint-following navigation controller
+- Continuous replanning during exploration
+
+### ROS 2 Integration
+- Modular ROS 2 node architecture
+- RViz2 visualisation support
+- TF transform broadcasting
+- Configurable simulation and physical robot parameters
+
+---
+
+## Main ROS 2 Nodes
+
+| Node | Purpose |
+|---|---|
+| `/slam_node` | Full SLAM pipeline integrating localisation, scan matching, optimisation, and map reconstruction |
+| `/planner_node` | Generates collision-safe A* paths from the SLAM occupancy grid |
+| `/navigator_node` | Follows planned trajectories and publishes rover velocity commands |
+| `/map_to_odom_publisher` | Publishes the static transform between map and odometry frames |
+| `/base_to_lidar_publisher` | Publishes the static transform between rover base and LiDAR frame |
+
+---
+
+## Main ROS Topics
+
+| Topic | Message Type | Description |
 |---|---|---|
-| `/succulence/odom` | `nav_msgs/msg/Odometry` | Raw odometry from the rover |
-| `/succulence/scan` | `sensor_msgs/msg/LaserScan` | LiDAR scan data |
-| `/succulence/map` | `nav_msgs/msg/OccupancyGrid` | SLAM occupancy grid map |
-| `/succulence/slam/odometry` | `nav_msgs/msg/Odometry` | Corrected SLAM odometry |
-| `/succulence/slam/path` | `nav_msgs/msg/Path` | SLAM trajectory for RViz2 visualisation |
-| `/succulence/plan` | `nav_msgs/msg/Path` | Planned A* path |
-| `/succulence/plan/inflated` | `nav_msgs/msg/OccupancyGrid` | Inflated planning grid for obstacle safety |
-| `/succulence/plan/reachable` | `nav_msgs/msg/OccupancyGrid` | Reachable planning grid |
-| `/cmd_vel` | `geometry_msgs/msg/Twist` | Velocity command sent to the rover |
-| `/tf_static` | `tf2_msgs/msg/TFMessage` | Static transform information |
+| `/succulence/odom` | `nav_msgs/msg/Odometry` | Raw rover odometry |
+| `/succulence/scan` | `sensor_msgs/msg/LaserScan` | 2D LiDAR scan data |
+| `/succulence/map` | `nav_msgs/msg/OccupancyGrid` | Corrected SLAM occupancy map |
+| `/succulence/slam/odometry` | `nav_msgs/msg/Odometry` | Corrected SLAM pose estimate |
+| `/succulence/slam/path` | `nav_msgs/msg/Path` | Optimised SLAM trajectory |
+| `/succulence/plan` | `nav_msgs/msg/Path` | Planned A* navigation path |
+| `/cmd_vel` | `geometry_msgs/msg/Twist` | Rover velocity commands |
+
+---
 
 ## System Pipeline
 
-The Unity Mars simulation publishes raw odometry and LiDAR scan data. The `/slam_node` uses these inputs to build a pose-graph SLAM map and publish corrected odometry. The `/planner_node` uses the SLAM map and corrected pose to generate an A* path. The `/navigator_node` follows the planned path and publishes `/cmd_vel` commands back to the simulated rover.
-
-Basic flow:
-
 ```text
-Unity Mars Simulation
-    ↓ /succulence/odom, /succulence/scan
+LiDAR + Wheel Odometry
+            ↓
+        SLAM System
+            ↓
+ Corrected Map + Pose
+            ↓
+       A* Planner
+            ↓
+     Navigation Control
+            ↓
+        Rover Motion
 
-/slam_node
-    ↓ /succulence/map, /succulence/slam/odometry
-
-/planner_node
-    ↓ /succulence/plan
-
-/navigator_node
-    ↓ /cmd_vel
-
-Unity Mars Simulation
-```
 ## Build Instructions For Simulation
 
 Clone the Simulation docker first:

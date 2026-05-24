@@ -58,7 +58,7 @@ git clone https://github.com/CollaborativeRoboticsLab/algorithmic-robots-world.g
 cd algorithmic-robots-world
 ```
 
-Now, inside the 'algorithmic-robots-world' folder create these folders '/workspace/succulence_ws/src' and finally clone this ros2 package into the ROS 2 workspace:
+Now, inside the 'algorithmic-robots-world' folder create these folders '/workspace/succulence_ws/src' and finally clone this ros2 package into the ros 2 workspace:
 
 ```bash
 cd ~/algorithmic-robots-world/workspace/succulence_ws/src/

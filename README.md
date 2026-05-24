@@ -123,7 +123,9 @@ Before using the physical robot, make sure there are no other simualtion/docker 
 docker ps
 ```
 
-If there is anything running then kill it. Then, Connect to the physical rover/TurtleBot network and make sure the required robot drivers are running. All the lights on the bot should be on. 
+If there is anything running then kill it. Then, Connect to the physical rover/TurtleBot network and make sure the required robot drivers are running. Edit the .env file and make sure to change the 
+
+All the led lights on the bot should be on. 
 Ip address will be displayed on the robot's screen.
 Login to your Physcial bot: 
 

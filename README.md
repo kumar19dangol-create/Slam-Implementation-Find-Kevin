@@ -80,7 +80,7 @@ xhost +local:root
 docker compose -f compose-simulation.yaml up
 ```
 
-In the Unity simulation, Press 'R' to switch the rover to Autonomous mode before launching the mission in the second terminal.
+In the Unity simulation, Press `R` to switch the rover to Autonomous mode before launching the mission in the second terminal.
 
 Launch the full simulation pipeline/misson in a second terminal:
 
@@ -96,7 +96,7 @@ Open preconfigured Rviz2 in a third terminal:
 ```bash
 rviz2
 ```
-Then inisde the rviz2 interface open 'file/open config', look for the folder 'config/succulance_slam.rviz'.
+Then inisde the rviz2 interface open `file/open config`, look for the file called `config/succulance_slam.rviz`.
 
 The simulation mission should run the full SLAM, A* planning, and navigation pipeline. The rover should build the SLAM map, publish a planned path on `/succulence/plan`, and start to drive to the point. 
 
@@ -123,11 +123,10 @@ Before using the physical robot, make sure there are no other simualtion/docker 
 docker ps
 ```
 
-If there is anything running then kill it. Then, Connect to the physical rover/TurtleBot network and make sure the required robot drivers are running. Edit the .env file and make sure to change the 
-
-All the led lights on the bot should be on. 
-Ip address will be displayed on the robot's screen.
-Login to your Physcial bot: 
+If there is anything running then kill it. Then, Connect to the physical rover/TurtleBot network first and make sure the required robot drivers are running/all the led lights should be on. 
+Then, edit the .env file and make sure to change the `ROBOT_ROS_DOMAIN_ID` and `ROBOT_ROS_DISCOVERY_SERVER` to match your Turtlbot's ID and its ip address. 
+Robot ID will be on the bot and the Ip address will be displayed on the robot's screen. 
+Finally, Login to your Physcial bot: 
 
 ```bash
 ssh @theipaddressoftherobot
@@ -150,4 +149,4 @@ Open preconfiguredRViz2 with the SLAM configuration:
 rviz2 -d src/succulence_rover_ros/config/succulance_slam_physical.rviz
 ```
 
-You will see your path to the goal and new area being discorved as your turtle bot moves through the area in real world. 
+You will see your path to the goal and map being initialized and new area being discorved as well as the path to gaol being updated as your turtle bot moves through the area in real world. 

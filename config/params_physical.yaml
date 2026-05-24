@@ -1,0 +1,196 @@
+# Succulence Rover — Algorithmic Robotics Lab Parameters
+#
+# Safer tuned version for Unity Mars simulation.
+# Main goal: reduce obstacle collisions and improve goal reaching.
+
+# ====================================================================
+# Week 5: Motion Model Node (Dead Reckoning)
+# ====================================================================
+motion_model:
+  ros__parameters:
+    odom_topic: "/odom"
+
+    dead_reckoning:
+      odometry_topic: "/succulence/dead_reckoning/odometry"
+      path_topic: "/succulence/dead_reckoning/path"
+
+    frames:
+      odom_frame: "odom"
+      base_link_frame: "base_link"
+      map_frame: "map"
+
+    lidar:
+      x_offset: 0.0
+      y_offset: 0.0
+      yaw_offset: 0.0
+
+    motion_model:
+      alpha1: 0.1
+      alpha2: 0.05
+      alpha3: 0.05
+      alpha4: 0.2
+      max_trajectory_length: 1000
+
+
+# ====================================================================
+# Week 5: Occupancy Grid Mapper Node
+# ====================================================================
+occupancy_grid_mapper:
+  ros__parameters:
+    scan_topic: "/scan"
+    odom_topic: "/succulence/dead_reckoning/odometry"
+    map_topic: "/succulence/map/odom_only"
+
+    map_publish_rate: 1.0
+
+    occupancy_grid:
+      resolution: 0.05
+      width: 300
+      height: 300
+      origin_x: 0.0
+      origin_y: 0.0
+
+      log_odds_occupied: 0.85
+      log_odds_free: 0.4
+      log_odds_max: 5.0
+      log_odds_min: -5.0
+
+      max_range: 3.0
+      min_range: 0.1
+
+    lidar:
+      x_offset: 0.0
+      y_offset: 0.0
+      yaw_offset: 0.0
+
+
+# ====================================================================
+# Week 11: SLAM Node (Pose Graph SLAM)
+# ====================================================================
+slam_node:
+  ros__parameters:
+    scan_topic: "/scan"
+    odom_topic: "/odom"
+
+    map_topic: "/succulence/map"
+    slam_odometry_topic: "/succulence/slam/odometry"
+    slam_path_topic: "/succulence/slam/path"
+
+    slam:
+      keyframe_distance: 0.1
+      keyframe_angle: 0.1
+
+      optimization_interval: 5
+      num_iterations: 10
+
+      map_publish_interval: 1.0
+
+      scan_match_cov_xy: 0.003
+      scan_match_cov_theta: 0.0015
+
+    # IMPORTANT:
+    # Changed from 1.570 to 0.0 so SLAM lidar matches the other nodes.
+    # A 1.570 rad offset means the laser is treated as rotated 90 degrees.
+    lidar:
+      x_offset: 0.0
+      y_offset: 0.0
+      yaw_offset: 1.570
+
+    motion_model:
+      alpha1: 0.1
+      alpha2: 0.05
+      alpha3: 0.05
+      alpha4: 0.2
+
+    scan_matcher:
+      search_x: 0.5
+      search_y: 0.5
+      search_theta: 0.15
+
+      resolution_x: 0.025
+      resolution_y: 0.025
+      resolution_theta: 0.02
+
+      min_score: 0.45
+
+      local_grid_size: 1000
+      local_grid_resolution: 0.025
+
+    occupancy_grid:
+      resolution: 0.05
+      width: 150
+      height: 150
+      origin_x: -3.0
+      origin_y: -3.0
+
+      log_odds_occupied: 0.85
+      log_odds_free: 0.4
+      log_odds_max: 5.0
+      log_odds_min: -5.0
+
+      max_range: 3.0
+      min_range: 0.1
+
+
+# ====================================================================
+# Week 12: A* Path Planner
+# ====================================================================
+planner_node:
+  ros__parameters:
+    map_topic: "/succulence/map"
+    odom_topic: "/succulence/slam/odometry"
+    plan_topic: "/succulence/plan"
+
+    frames:
+      map_frame: "map"
+
+    planning:
+      # Faster replanning helps the rover react when the map changes.
+      replan_period: 0.2
+
+      # Slightly stricter than 50, so uncertain obstacle cells are avoided earlier.
+      occupancy_threshold: 50
+
+      # Keep false so the rover can still explore unknown space.
+      # If it keeps driving into unmapped walls, try true, but it may cause no-path errors.
+      treat_unknown_as_obstacle: false
+
+      # 4 cells × 0.05 m = about 0.20 m safety margin.
+      # This is the main fix for hitting walls.
+      inflation_radius_cells: 1.87
+
+    # Goal position in map frame.
+    goal:
+      x: 3.18
+      y: 0.9
+
+# ====================================================================
+# Week 12: Pure-Pursuit Navigator
+# ====================================================================
+navigator_node:
+  ros__parameters:
+    plan_topic: "/succulence/plan"
+    odom_topic: "/succulence/slam/odometry"
+    cmd_vel_topic: "/cmd_vel_unstamped"
+
+    control:
+      rate_hz: 10.0
+
+      # Reduced from 1.5.
+      # Smaller lookahead follows the A* path more tightly and cuts corners less.
+      lookahead: 0.7
+
+      # Reduced from 0.25.
+      # Slower speed gives SLAM and the controller more time to react.
+      max_linear_v: 0.22
+
+      # Increased from 0.15
+      # The rover needs enough turning speed to follow curved paths.
+      max_angular_v: 0.26
+
+      # Increased from 0.05.
+      # 5 cm is too strict for noisy SLAM, so 20 cm is safer.
+      goal_tolerance: 0.2
+
+      # Must be greater than replan_period.
+      plan_timeout: 3.0

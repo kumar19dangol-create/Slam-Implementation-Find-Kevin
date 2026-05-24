@@ -158,3 +158,10 @@ rviz2 -d src/succulence_rover_ros/config/succulance_slam_physical.rviz
 ```
 
 You will see your path to the goal and map being initialized and new area being discorved as well as the path to gaol being updated as your turtle bot moves through the area in real world. 
+
+### To stop the Turtlebot and the rviz2
+
+```bash
+CTRL + C the misson running terminal in the web-based VS
+```
+Finally kill the docker container for the turtlebot being run in your main computer terminal just like you kill the siumualtion and also close the terminal where you logged into the turtlebot.

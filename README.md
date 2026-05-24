@@ -131,8 +131,16 @@ Finally, Login to your Physcial bot:
 ```bash
 ssh @theipaddressoftherobot
 ```
+Now in a new terminal, To start the physcial bot environmet/initinalize:
 
-To run mission:
+```bash
+cd ~/algorithmic-robots-world
+xhost +local:root
+docker compose -f compose-physical.yaml up
+```
+Open the broswer IDE at `http://127.0.0.1:8080`. This will open Web based Visual Studio that is connected to the robot aready. 
+
+Now, To run mission, open another terminal:
 
 ```bash
 cd ~/algorithmic-robots-world/workspace/succulence_ws

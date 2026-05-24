@@ -1,8 +1,8 @@
-# Operation Find Kevin — Autonomous SLAM and Navigation System
+# Operation Find Kevin: Autonomous SLAM and Navigation System
 
-This repository contains the complete ROS 2 autonomy stack developed for the *Operation Find Kevin* robotics challenge. The project focuses on autonomous mapping, localisation, path planning, and navigation for the Succulence rover operating in a simulated Martian environment.
+This repository contains the complete ros 2 autonomy stack developed for the Operation Find Kevin robotics challenge. The project focuses on autonomous mapping, localisation, path planning, and navigation for the Succulence rover operating in a simulated Martian environment.
 
-The system enables the rover to explore an initially unknown environment using LiDAR and wheel odometry, construct an occupancy-grid map using pose-graph SLAM, estimate its corrected position, and autonomously navigate toward a target location using A* path planning and waypoint-following control.
+The system enables the rover to explore an initially unknown environment using Lidar and wheel odometry, construct an occupancy-grid map using pose-graph Slam, estimate its corrected position, and autonomously navigate toward a target location using A* path planning and waypoint-following control.
 
 The full robotics pipeline integrates sensing, localisation, mapping, planning, and motion control into a continuous real-time autonomy loop. As new sensor data is received, the rover continuously updates its map, corrects localisation drift, replans safe paths, and publishes velocity commands for navigation.
 
@@ -12,10 +12,10 @@ The full robotics pipeline integrates sensing, localisation, mapping, planning, 
 
 ### SLAM and Localisation
 - Motion-model based dead reckoning
-- Correlation-based LiDAR scan matching
+- Correlation-based Lidar scan matching
 - Pose-graph optimisation using Gauss-Newton least squares
 - Occupancy-grid map reconstruction
-- Corrected SLAM odometry estimation
+- Corrected Slam odometry estimation
 
 ### Autonomous Navigation
 - A* shortest-path planning
@@ -25,8 +25,8 @@ The full robotics pipeline integrates sensing, localisation, mapping, planning, 
 - Continuous replanning during exploration
 
 ### ROS 2 Integration
-- Modular ROS 2 node architecture
-- RViz2 visualisation support
+- Modular Ros 2 node architecture
+- Rviz2 visualisation support
 - TF transform broadcasting
 - Configurable simulation and physical robot parameters
 
@@ -37,10 +37,10 @@ The full robotics pipeline integrates sensing, localisation, mapping, planning, 
 | Node | Purpose |
 |---|---|
 | `/slam_node` | Full SLAM pipeline integrating localisation, scan matching, optimisation, and map reconstruction |
-| `/planner_node` | Generates collision-safe A* paths from the SLAM occupancy grid |
+| `/planner_node` | Generates collision-safe A* paths from the Slam occupancy grid |
 | `/navigator_node` | Follows planned trajectories and publishes rover velocity commands |
 | `/map_to_odom_publisher` | Publishes the static transform between map and odometry frames |
-| `/base_to_lidar_publisher` | Publishes the static transform between rover base and LiDAR frame |
+| `/base_to_lidar_publisher` | Publishes the static transform between rover base and Lidar frame |
 
 ---
 
@@ -49,10 +49,10 @@ The full robotics pipeline integrates sensing, localisation, mapping, planning, 
 | Topic | Message Type | Description |
 |---|---|---|
 | `/succulence/odom` | `nav_msgs/msg/Odometry` | Raw rover odometry |
-| `/succulence/scan` | `sensor_msgs/msg/LaserScan` | 2D LiDAR scan data |
-| `/succulence/map` | `nav_msgs/msg/OccupancyGrid` | Corrected SLAM occupancy map |
-| `/succulence/slam/odometry` | `nav_msgs/msg/Odometry` | Corrected SLAM pose estimate |
-| `/succulence/slam/path` | `nav_msgs/msg/Path` | Optimised SLAM trajectory |
+| `/succulence/scan` | `sensor_msgs/msg/LaserScan` | 2D Lidar scan data |
+| `/succulence/map` | `nav_msgs/msg/OccupancyGrid` | Corrected Slam occupancy map |
+| `/succulence/slam/odometry` | `nav_msgs/msg/Odometry` | Corrected Slam pose estimate |
+| `/succulence/slam/path` | `nav_msgs/msg/Path` | Optimised Slam trajectory |
 | `/succulence/plan` | `nav_msgs/msg/Path` | Planned A* navigation path |
 | `/cmd_vel` | `geometry_msgs/msg/Twist` | Rover velocity commands |
 
@@ -61,7 +61,7 @@ The full robotics pipeline integrates sensing, localisation, mapping, planning, 
 ## System Pipeline
 
 ```text
-LiDAR + Wheel Odometry
+Lidar + Wheel Odometry
             ↓
         SLAM System
             ↓
@@ -72,10 +72,12 @@ LiDAR + Wheel Odometry
      Navigation Control
             ↓
         Rover Motion
+```
 
 ## Build Instructions For Simulation
 
 Clone the Simulation docker first:
+
 ```bash
 git clone https://github.com/CollaborativeRoboticsLab/algorithmic-robots-world.git
 cd algorithmic-robots-world

@@ -140,7 +140,7 @@ docker compose -f compose-physical.yaml up
 ```
 Open the broswer IDE at `http://127.0.0.1:8080`. This will open Web based Visual Studio that is connected to the robot aready. 
 
-Now, To run mission, open another terminal:
+Now, To run mission, open new terminal inside that web-based VS:
 
 ```bash
 cd ~/algorithmic-robots-world/workspace/succulence_ws
@@ -151,7 +151,7 @@ ros2 launch succulence_rover_ros mission_physical.launch.py
 
 The physical launch file uses the physical parameter file and starts with the `/reset_pose` service so the robot odometry begins from zero. After the reset returns successfully, the static TF publishers, SLAM node, planner node, and navigator node start.
 
-Open preconfiguredRViz2 with the SLAM configuration:
+Open preconfigured Rviz2 with the SLAM configuration in that web-based VS:
 
 ```bash
 rviz2 -d src/succulence_rover_ros/config/succulance_slam_physical.rviz
